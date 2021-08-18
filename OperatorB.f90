@@ -13,12 +13,12 @@ program main
 end program
     
 subroutine OperatorB(dp,dt,t,n,B)
-    !Êä³öB=exp(-i*dt*HI(t+dt/2))
+    !ÃŠÃ¤Â³Ã¶B=exp(-i*dt*HI(t+dt/2))
     implicit none
     integer i,Nmax,n
     real*8 E0,omg,tau,pi
     parameter (Nmax=1000)
-    parameter (E0=5.337e-4,omg=2.85e-2,tau=2.667e-14,pi=4.0*datan(1.0d0))
+    parameter (E0=5.337e-4,omg=2.85e-2,tau=1102,pi=4.0*datan(1.0d0))
     real*8 HI(Nmax,Nmax),B(Nmax,Nmax)
     real*8 dp,dt,t
     real*8 At
