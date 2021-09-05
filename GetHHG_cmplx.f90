@@ -14,13 +14,13 @@ subroutine HHG(dt,m)
     real*8,parameter:: omg=2.85e-2
     real*8,parameter:: domg=0.1*omg,OmgMax=35*omg
     integer m,l,i,j !m=tau/dt,时间轴的格数
-    real*8,allocatable :: dv(:),Fomg(:)
+    complex,allocatable :: dv(:),Fomg(:)
     l=OmgMax/domg !l=350,Omega轴的格数
     allocate(dv(0:m),Fomg(0:l))
     !allocate(Fomg(0:l))
     
     !读取dv
-    open(10,file="Dipole.txt")
+    open(10,file="Dipole_cmplx.txt")
     do i=0,m
     read(10,*) (dv(i))
     end do
@@ -31,13 +31,14 @@ subroutine HHG(dt,m)
         do j=0,m
             sum=sum+dv(j)*exp(-cj*j*dt*i*domg)*dt
         end do
-        Fomg(i)=sum*conjg(sum)
+        !Fomg(i)=sum*conjg(sum)
+        Fomg(i)=abs(sum)**2
     end do
     
     !输出F(Omg)
-    open(11,file="HHGOut.txt")
+    open(11,file="HHGOut_cmplx.txt")
     !write(11,*) (Fomg(i),i=0,l)
-    write(11,"(351e)") (Fomg)
+    write(11,"(351e)") (real(Fomg))
     close(11)
     print *, "Finished!"
     pause

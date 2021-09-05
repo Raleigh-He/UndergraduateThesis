@@ -12,26 +12,27 @@ subroutine OperatorA(dp,Pc,dt)
 implicit none
 
 complex cj
-parameter(cj=(0.,1.))!è™šæ•°å•ä½
+parameter(cj=(0.,1.))!ĞéÊıµ¥Î»
 real*8 dp,Pc,dt
 integer i,j,k
 integer n
 character InName*12,OutName*15
-real*8,allocatable :: A(:,:),EigVal(:),EigVec(:,:)
-n=Pc/dp!å¦‚n=5.0/0.01=500
+real*8,allocatable :: EigVal(:),EigVec(:,:)
+complex,allocatable :: A(:,:)
+n=Pc/dp!Èçn=5.0/0.01=500
 allocate(A(1:n+1,1:n+1))
 allocate(EigVal(1:n+1))
 allocate(EigVec(1:n+1,1:n+1))
-write(*,*) 'è¯·æŒ‡å®šè¾“å…¥æ–‡ä»¶åï¼š'
+write(*,*) 'ÇëÖ¸¶¨ÊäÈëÎÄ¼şÃû£º'
 read(*,*) InName
-!è¯»å–H0çš„ç‰¹å¾å€¼ç‰¹å¾å‘é‡
+!¶ÁÈ¡H0µÄÌØÕ÷ÖµÌØÕ÷ÏòÁ¿
 open(10,file=InName)
 read(10,*) (EigVal(i),i=1,n+1)
 do i=1,n+1
     read(10,*) (EigVec(i,j),j=1,n+1)
 end do
 close(10)
-!å®šä¹‰ç®—ç¬¦A=exp(-i*H0*dt)
+!¶¨ÒåËã·ûA=exp(-i*H0*dt)
 do i=1,n+1
     do j=1,i
         A(i,j)=0
@@ -43,7 +44,7 @@ do i=1,n+1
         A(j,i)=A(i,j)
     end do
 end do
-write(*,*) 'è¯·æŒ‡å®šè¾“å‡ºæ–‡ä»¶åï¼š'
+write(*,*) 'ÇëÖ¸¶¨Êä³öÎÄ¼şÃû£º'
 read(*,*) OutName
 open(11,file=Outname)
 do i=1,n+1
@@ -51,7 +52,7 @@ WRITE(11,*) A(i,:)
 end do
 close(11)
 !print "(2e10.5)",A(1,2),A(2,1)
-!write(*,*) 'ç®—ç¬¦Açš„çŸ©é˜µå½¢å¼ï¼š'
+!write(*,*) 'Ëã·ûAµÄ¾ØÕóĞÎÊ½£º'
 !do i=1,n+1
 !WRITE(*,*)(A(I,J),J=1,N+1)
 !print "(/)"
@@ -60,9 +61,9 @@ close(11)
      !   EigVec(j,i)=EigVec(i,j)
     !end do
 
- !WRITE(*,*) 'Açš„ç‰¹å¾å€¼ä¸º:'
+ !WRITE(*,*) 'AµÄÌØÕ÷ÖµÎª:'
  !       WRITE(*,*) (EigVal(I),I=1,N+1)
- !       WRITE(*,*) 'Açš„ç‰¹å¾å‘é‡ä¸º:'
+ !       WRITE(*,*) 'AµÄÌØÕ÷ÏòÁ¿Îª:'
         !WRITE(*,*) '  X1      X2     X3     ...:'
         !DO I=1,N+1
         !WRITE(*,*)(EigVec(I,J),J=1,N+1)
