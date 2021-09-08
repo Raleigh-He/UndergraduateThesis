@@ -6,9 +6,9 @@
         IMPLICIT NONE
         INTEGER NMAX,N,I,J,P,Q,change,k
         PARAMETER(NMAX=1000)
-        REAL A(NMAX,NMAX),AMAX,TEMP,ZEMP,COO,SII,CO,SI,APP,AQQ,APQ,API,AQI
-        REAL R(NMAX,NMAX),RIP,RIQ,temp2
-        REAL tempArr(NMAX)
+        REAL*8 A(NMAX,NMAX),AMAX,TEMP,ZEMP,COO,SII,CO,SI,APP,AQQ,APQ,API,AQI
+        REAL*8 R(NMAX,NMAX),RIP,RIQ,temp2,temp3
+        REAL*8 tempArr(NMAX)
         CHARACTER NAME*12,NAMEO*12,CHR*1
 ! 从文件中读入实对称矩阵A
         WRITE(*,*)'输入实对称矩阵维数n(n<1000):'
@@ -31,13 +31,13 @@
         R(I,I)=1
         ENDDO
 ! 在矩阵A的非主对角线元素中,找出按模最大的元素Apq
-100        AMAX=ABS(A(2,1))
+100        AMAX=dABS(A(2,1))
         P=2
         Q=1
         DO I=2,N
          DO J=1,I-1
-         IF(ABS(A(I,J)).GT.AMAX) THEN
-         AMAX=ABS(A(I,J))
+         IF(dABS(A(I,J)).GT.AMAX) THEN
+         AMAX=dABS(A(I,J))
          P=I
          Q=J
          ENDIF
@@ -46,7 +46,7 @@
 
 
 ! 当非主对角线元素化为0,即小于给定精度时,输出特征值与特征向量
-        IF(AMAX.LE.1.0E-7) THEN
+        IF(AMAX.LE.1.0E-14) THEN
             do i=1,N-1
                 change=0
                 do j=1,N-1
@@ -70,24 +70,34 @@
         WRITE(*,*) (A(I,I),I=1,N)
         !WRITE(*,*) 'A的特征向量为:'
         !WRITE(*,*) '  X1      X2     X3     ...:'
-        DO I=1,N
-        WRITE(*,*)(R(I,J),J=1,N)
-        ENDDO
+!        DO I=1,N
+!        WRITE(*,*)(R(I,J),J=1,N)
+!        ENDDO
 
         WRITE(*,*) '是否将结果存入文件(Y/N)?'
         READ(*,*) CHR
         IF(CHR.EQ.'Y'.OR.CHR.EQ.'y') THEN
-        WRITE(*,*) '输入文件名(小于12字符):'
-        READ(*,*) NAMEO
-        OPEN(8,FILE=NAMEO)
-        WRITE(8,*) 'A的特征值为:'
+!        WRITE(*,*) '输入文件名(小于12字符):'
+!        READ(*,*) NAMEO
+        OPEN(8,FILE='EigE.txt')
+        open(9,file='EigV.txt')
+!        WRITE(8,*) 'A的特征值为:'
         WRITE(8,*) (A(I,I),I=1,N)
-        WRITE(8,*) 'A的特征向量为:'
-        WRITE(8,*) '  X1      X2     X3     ...:'
+!        WRITE(8,*) 'A的特征向量为:'
+!        WRITE(8,*) '  X1      X2     X3     ...:'
         DO I=1,N
-        WRITE(8,*)(R(I,J),J=1,N)
+        do j=1,N
+        WRITE(9,*)R(I,J)
         ENDDO
+        enddo
         CLOSE(8)
+        open(2,file='phi1.dat')
+        temp3=0.d0
+        do i=1,N
+        write(2,*)R(i,1)
+        temp3=temp3+R(i,1)*R(i,2)
+        enddo
+        write(*,*)temp3
         ENDIF
 
         STOP
