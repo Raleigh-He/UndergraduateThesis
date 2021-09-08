@@ -1,7 +1,7 @@
 program main
 implicit none
 
-real*8,parameter :: dp=0.01,Pc=5.0
+real*8,parameter :: dp=0.01,Pc=6.0
 call GetH0(dp,Pc)
 
 pause
@@ -39,7 +39,7 @@ end do
 
 open(unit=10,file='H0_3.txt')
 do i=-n/2,n/2
-    write(10,"(501f)") H0(i,:)
+    write(10,"(601f)") H0(i,:)
 end do
 close(10)
 
@@ -74,34 +74,4 @@ r=h/3*(-exp(cj*p*a)/sqrt(1+(a)**2)+exp(cj*p*b)/sqrt(1+(b)**2)+r)
 !r=h/3*(sin(a)-sin(b)+r)
 end subroutine
 
-subroutine OperatorA(dp,Pc)
-implicit none
 
-real*8 dp,Pc
-integer i,j,k
-integer n
-character InName*12
-real*8,allocatable A(:,:),EigVal(:),EigVec(:,:)
-n=Pc/dp!如n=5.0/0.01=500
-allocate(A(1:n+1,1:n+1))
-allocate(EigVal(1:n+1))
-allocate(EigVec(1:n+1,1:n+1))
-write(*,*) '请指定输入文件名：'
-read(*,*) InName
-
-open(10,InName)
-read(10,*) (EigVal(i),i=1,n+1)
-do i=1,n+1
-    read(10,*) (EigVec(i,j),j=1,i)
-    do j=1,i
-        EigVec(j,i)=EigVec(i,j)
-    end do
-end do
- WRITE(*,*) 'A的特征值为:'
-        WRITE(*,*) (EigVal(I),I=1,N+1)
-        WRITE(*,*) 'A的特征向量为:'
-        WRITE(*,*) '  X1      X2     X3     ...:'
-        DO I=1,N+1
-        WRITE(*,*)(EigVec(I,J),J=1,N+1)
-        ENDDO
-end subroutine
