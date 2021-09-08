@@ -2,7 +2,7 @@ program main
     implicit none
     real*8 dp,Pc,dt
     dp=0.01
-    Pc=5.0
+    Pc=6.0
     dt=0.1
     call OperatorA(dp,Pc,dt)
     pause
@@ -18,19 +18,22 @@ integer i,j,k
 integer n
 character InName*12,OutName*15
 real*8,allocatable :: EigVal(:),EigVec(:,:)
-complex,allocatable :: A(:,:)
+double complex,allocatable :: A(:,:)
 n=Pc/dp!如n=5.0/0.01=500
 allocate(A(1:n+1,1:n+1))
 allocate(EigVal(1:n+1))
 allocate(EigVec(1:n+1,1:n+1))
-write(*,*) '请指定输入文件名：'
-read(*,*) InName
+!write(*,*) '请指定输入文件名：'
+!read(*,*) InName
 !读取H0的特征值特征向量
-open(10,file=InName)
+open(10,file='EigE.txt')
 read(10,*) (EigVal(i),i=1,n+1)
+open(11,file='EigV.txt')
 do i=1,n+1
-    read(10,*) (EigVec(i,j),j=1,n+1)
+do j=1,n+1
+    read(11,*) EigVec(i,j)
 end do
+enddo
 close(10)
 !定义算符A=exp(-i*H0*dt)
 do i=1,n+1
@@ -44,12 +47,14 @@ do i=1,n+1
         A(j,i)=A(i,j)
     end do
 end do
-write(*,*) '请指定输出文件名：'
-read(*,*) OutName
-open(11,file=Outname)
+!write(*,*) '请指定输出文件名：'
+!read(*,*) OutName
+open(12,file='OA.txt')
 do i=1,n+1
-WRITE(11,*) A(i,:)
+do j=1,n+1
+WRITE(12,*) A(i,j)
 end do
+enddo
 close(11)
 !print "(2e10.5)",A(1,2),A(2,1)
 !write(*,*) '算符A的矩阵形式：'
