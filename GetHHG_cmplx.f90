@@ -11,7 +11,7 @@ subroutine HHG(dt,m)
     complex cj,sum
     parameter(cj=(0.,1.))
     real*8 dt
-    real*8,parameter:: omg=2.85e-2
+    real*8,parameter:: omg=5.7e-2
     real*8,parameter:: domg=0.1*omg,OmgMax=35*omg
     integer m,l,i,j !m=tau/dt,时间轴的格数
     complex,allocatable :: dv(:),Fomg(:)
@@ -20,7 +20,7 @@ subroutine HHG(dt,m)
     !allocate(Fomg(0:l))
     
     !读取dv
-    open(10,file="Dipole_cmplx.txt")
+    open(10,file="Dipole_real.txt")
     do i=0,m
     read(10,*) (dv(i))
     end do
